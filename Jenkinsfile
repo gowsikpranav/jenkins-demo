@@ -1,32 +1,43 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('* * * * *')
+    }
+
     stages {
+
         stage('Checkout') {
             steps {
-                echo 'Code pulled from GitHub repository'
+                checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Compile') {
             steps {
-                echo 'Building from Jenkinsfile...'
+                bat 'javac Hello.java'
             }
         }
 
-        stage('Test') {
+        stage('Run') {
             steps {
-                echo 'Testing from Jenkinsfile...'
+                bat 'java Hello'
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: '*.class', fingerprint: true
             }
         }
     }
 
     post {
         success {
-            echo 'Build completed SUCCESSFULLY 🎉'
+            echo 'CI Pipeline SUCCESS ✅'
         }
         failure {
-            echo 'Build FAILED ❌'
+            echo 'CI Pipeline FAILED ❌'
         }
     }
 }
