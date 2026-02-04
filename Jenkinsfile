@@ -20,4 +20,13 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo 'Build completed SUCCESSFULLY 🎉'
+        }
+        failure {
+            echo 'Build FAILED ❌'
+        }
+    }
 }
